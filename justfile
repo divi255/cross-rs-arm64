@@ -14,7 +14,7 @@ build-cross:
   cd cross && git reset --hard
   patch -p1 -d cross < ./cross.patch
   cd cross && cargo xtask codegen && cargo build --release
-  cp ./cross/target/release/cross ./cross/target/release/cross-util ~/.cargo/bin/
+  cp -f ./cross/target/release/cross ./cross/target/release/cross-util ~/.cargo/bin/
 
 clean:
   rm -rf cross
