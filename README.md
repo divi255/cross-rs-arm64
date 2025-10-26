@@ -1,6 +1,6 @@
 # cross-rs-arm64
 
-Docker images for native targets:
+ARM64-Docker images for targets:
 
 * aarch64-unknown-linux-gnu
 
@@ -9,7 +9,8 @@ Docker images for native targets:
 Contain additional packages (libssl-dev, gstreamer-dev) to facilitate
 cross-compilation.
 
-Ubuntu 22.04 LTS-based.
+Ubuntu 22.04 LTS-based. Useful for development workstations running on
+ARM64-Linux or Apple Silicon.
 
 ## How to use
 
