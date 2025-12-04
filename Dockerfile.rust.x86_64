@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libclang-dev:$CROSS_DEB_ARCH \
     libc6-dev:$CROSS_DEB_ARCH \
     libssl-dev:$CROSS_DEB_ARCH \
+    libtbb-dev:$CROSS_DEB_ARCH \
     pkg-config:$CROSS_DEB_ARCH \
     zlib1g-dev:$CROSS_DEB_ARCH \
     libudev-dev:$CROSS_DEB_ARCH \
