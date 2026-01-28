@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config \
     make \
     cmake \
+    golang \
     nasm \
     llvm \
     libclang-dev:$CROSS_DEB_ARCH \
