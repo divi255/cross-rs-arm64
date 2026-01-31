@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 ubuntu:22.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV CROSS_DEB_ARCH=arm64
@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libclang-dev \
     libc6-dev-arm64-cross \
     libgcc-s1-arm64-cross \
+    libpam0g-dev \
     g++-aarch64-linux-gnu \
     curl \
     openssl \
@@ -26,6 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libc6-dev:$CROSS_DEB_ARCH \
     libssl-dev:$CROSS_DEB_ARCH \
     libtbb-dev:$CROSS_DEB_ARCH \
+    libpam0g-dev:$CROSS_DEB_ARCH \
     pkg-config:$CROSS_DEB_ARCH \
     zlib1g-dev:$CROSS_DEB_ARCH \
     libudev-dev:$CROSS_DEB_ARCH \
@@ -34,6 +36,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN rm -rf /var/lib/apt/lists/*
 
+RUN printf '%s\n' \
+  '#!/bin/sh' \
+  'export PKG_CONFIG_DIR=' \
+  'export PKG_CONFIG_LIBDIR=/usr/lib/aarch64-linux-gnu/pkgconfig' \
+  'export PKG_CONFIG_SYSROOT_DIR=/' \
+  'exec pkg-config "$@"' \
+  > /usr/local/bin/aarch64-linux-gnu-pkg-config && chmod +x /usr/local/bin/aarch64-linux-gnu-pkg-config
 ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
-ENV PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
-ENV PKG_CONFIG_SYSROOT_DIR=/
+ENV PKG_CONFIG_aarch64_unknown_linux_gnu=/usr/local/bin/aarch64-linux-gnu-pkg-config
+ENV PKG_CONFIG_ALLOW_CROSS=1
