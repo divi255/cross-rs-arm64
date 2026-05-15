@@ -6,6 +6,8 @@ ARM64-Docker images for targets:
 
 * x86_64-unknown-linux-gnu
 
+* armv7-unknown-linux-gnueabihf (same image suits `arm-unknown-linux-gnueabihf`; triplet `arm-linux-gnueabihf`)
+
 Contain additional packages (libssl-dev, gstreamer-dev) to facilitate
 cross-compilation.
 
@@ -23,8 +25,14 @@ automatically with all projects by default):
 just build-docker
 ```
 
-Build cross-rs to correctly use the new images:
+Build cross-rs to correctly use the new images (sets Docker `--platform
+linux/arm64` for aarch64, x86_64 musl, and **armv7 / arm gnueabihf** so Apple
+Silicon / ARM64 hosts use your local layers instead of pulling amd64):
 
 ```
 just build-cross
 ```
+
+If you insist on the **stock** `cross` from crates.io, rebuild the armv7 image
+for amd64 instead:  
+`docker build --platform linux/amd64 -t ghcr.io/cross-rs/armv7-unknown-linux-gnueabihf:main -f Dockerfile.rust.armhf .`

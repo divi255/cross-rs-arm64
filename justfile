@@ -1,13 +1,16 @@
 all:
   @echo "Select target"
 
-build-docker: build-docker-x86_64 build-docker-aarch64
+build-docker: build-docker-x86_64 build-docker-aarch64 build-docker-armv7-gnueabihf
 
 build-docker-x86_64:
   docker build -t ghcr.io/cross-rs/x86_64-unknown-linux-gnu:main -f Dockerfile.rust.x86_64 .
 
 build-docker-aarch64:
   docker build -t ghcr.io/cross-rs/aarch64-unknown-linux-gnu:main -f Dockerfile.rust.aarch64 .
+
+build-docker-armv7-gnueabihf:
+  docker build --platform linux/arm64 -t ghcr.io/cross-rs/armv7-unknown-linux-gnueabihf:main -f Dockerfile.rust.armhf .
 
 build-docker-x86_64-legacy:
   docker build -t bmauto/u20-x86_64 -f Dockerfile.rust.x86_64-u20 .
