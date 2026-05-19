@@ -1,0 +1,59 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+COPY ./sources.list.u22 /etc/apt/sources.list
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libssl-dev \
+    libclang-dev \
+    libc6-dev-armel-cross \
+    libgcc-s1-armel-cross \
+    libpam0g-dev \
+    g++-arm-linux-gnueabi \
+    curl \
+    ca-certificates \
+    git \
+    pkg-config \
+    make \
+    cmake \
+    golang \
+    nasm \
+    llvm \
+    perl
+
+RUN rm -rf /var/lib/apt/lists/*
+
+# Ubuntu 22.04 has no libssl-dev:armel; cross-build OpenSSL for arm-linux-gnueabi.
+ARG OPENSSL_VERSION=3.0.15
+RUN curl -fsSL "https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz" \
+    | tar xz -C /tmp \
+ && cd "/tmp/openssl-${OPENSSL_VERSION}" \
+ && ./Configure linux-armv4 \
+      --cross-compile-prefix=arm-linux-gnueabi- \
+      --prefix=/usr/local/arm-linux-gnueabi \
+      --openssldir=/usr/local/arm-linux-gnueabi/ssl \
+      no-asm \
+ && make -j"$(nproc)" \
+ && make install_sw \
+ && rm -rf "/tmp/openssl-${OPENSSL_VERSION}" \
+ && mkdir -p /usr/lib/arm-linux-gnueabi/pkgconfig \
+ && cp /usr/local/arm-linux-gnueabi/lib/pkgconfig/*.pc /usr/lib/arm-linux-gnueabi/pkgconfig/
+
+RUN printf '%s\n' \
+  '#!/bin/sh' \
+  'export PKG_CONFIG_DIR=' \
+  'export PKG_CONFIG_LIBDIR=/usr/lib/arm-linux-gnueabi/pkgconfig' \
+  'export PKG_CONFIG_SYSROOT_DIR=/' \
+  'exec pkg-config "$@"' \
+  > /usr/local/bin/arm-linux-gnueabi-pkg-config && chmod +x /usr/local/bin/arm-linux-gnueabi-pkg-config
+
+ENV CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABI_LINKER=arm-linux-gnueabi-gcc
+ENV CARGO_TARGET_ARM_UNKNOWN_LINUX_GNUEABI_LINKER=arm-linux-gnueabi-gcc
+ENV PKG_CONFIG_armv7_unknown_linux_gnueabi=/usr/local/bin/arm-linux-gnueabi-pkg-config
+ENV PKG_CONFIG_arm_unknown_linux_gnueabi=/usr/local/bin/arm-linux-gnueabi-pkg-config
+ENV PKG_CONFIG_ALLOW_CROSS=1
+ENV ARM_UNKNOWN_LINUX_GNUEABI_OPENSSL_DIR=/usr/local/arm-linux-gnueabi
+ENV OPENSSL_DIR=/usr/local/arm-linux-gnueabi
+ENV CMAKE_ARGS=-DWITH_SIMD=0
