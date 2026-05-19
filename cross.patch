@@ -1,23 +1,40 @@
 diff --git a/targets.toml b/targets.toml
+index 9029850..7251822 100644
 --- a/targets.toml
 +++ b/targets.toml
-@@ -28,6 +28,7 @@
- run = true
- runners = "native qemu-user"
- deploy = true
-+platforms = ["linux/arm64"]
- 
- [[target]]
- target = "x86_64-pc-windows-msvc"
-@@ -53,6 +54,7 @@
+@@ -26,6 +26,7 @@ cpp = true
+ dylib = true
  std = true
  run = true
++platforms = ["linux/arm64"]
+ runners = "native qemu-user"
+ deploy = true
+ 
+@@ -52,6 +53,7 @@ cpp = true
+ dylib = true
+ std = true
+ run = true
++platforms = ["linux/arm64"]
  runners = "qemu-user qemu-system"
+ 
+ [[target]]
+@@ -61,6 +63,7 @@ cpp = true
+ dylib = true
+ std = true
+ run = true
++platforms = ["linux/arm64"]
+ runners = "qemu-user"
+ build-std = true
+ 
+@@ -71,6 +74,7 @@ cpp = true
+ dylib = true
+ std = true
+ run = true
 +platforms = ["linux/arm64"]
  
  [[target]]
- target = "aarch64_be-unknown-linux-gnu"
-@@ -79,6 +81,7 @@
+ target = "arm-unknown-linux-gnueabihf"
+@@ -79,6 +83,7 @@ cpp = true
  dylib = true
  std = true
  run = true
@@ -25,11 +42,19 @@ diff --git a/targets.toml b/targets.toml
  
  [[target]]
  target = "armv7-unknown-linux-gnueabi"
-@@ -97,6 +100,7 @@
+@@ -87,6 +92,7 @@ cpp = true
+ dylib = true
  std = true
  run = true
- runners = "qemu-user qemu-system"
 +platforms = ["linux/arm64"]
+ runners = "qemu-user"
  
  [[target]]
- target = "thumbv7neon-unknown-linux-gnueabihf"
+@@ -96,6 +102,7 @@ cpp = true
+ dylib = true
+ std = true
+ run = true
++platforms = ["linux/arm64"]
+ runners = "qemu-user qemu-system"
+ 
+ [[target]]
