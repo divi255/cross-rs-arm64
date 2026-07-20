@@ -27,7 +27,7 @@ build-docker-x86_64-legacy:
 
 build-cross:
   [ ! -d ./cross ] && git clone https://github.com/cross-rs/cross || echo "Cross repo already exists"
-  cd cross && git reset --hard
+  cd cross && git fetch origin && git reset --hard origin/main && git clean -fd
   patch -p1 -d cross < ./cross.patch
   cd cross && cargo xtask codegen && cargo build --release
   cp -f ./cross/target/release/cross ./cross/target/release/cross-util ~/.cargo/bin/

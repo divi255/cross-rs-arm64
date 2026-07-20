@@ -30,7 +30,7 @@ just build-docker
 ```
 
 Build cross-rs to correctly use the new images (sets Docker `--platform
-linux/arm64` for aarch64, x86_64 musl, and **arm gnueabi(hf)** so Apple
+linux/arm64` for aarch64, x86_64 gnu, and **arm gnueabi(hf)** so Apple
 Silicon / ARM64 hosts use your local layers instead of pulling amd64):
 
 ```
